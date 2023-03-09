@@ -13,11 +13,11 @@
     // zipcode = "11355",
     // zipcode = "85086",
     startTimestamp,
-    startTimestampg,
-    startTimestampo,
+    startTSG,
+    startTSO,
     endTimestamp,
-    endTimestampg,
-    endTimestampo,
+    endTSG,
+    endTSO,
     sd,
     st,
     ed,
@@ -27,16 +27,16 @@
     // startTimestamp = new Date(Date.parse(`${sd}T${st}`));
     startTimestamp = DateTime.fromJSDate(new Date(Date.parse(`${sd}T${st}`)));
     startTimestamp = startTimestamp.setZone(timezone).toISO();
-    startTimestampg = startTimestamp; // google
-    startTimestampo = startTimestamp.slice(0, -10) + startTimestamp.slice(-6, startTimestamp.length + 1); // outlook
+    startTSG = startTimestamp; // google
+    startTSO = startTimestamp.slice(0, -10) + startTimestamp.slice(-6, startTimestamp.length + 1); // outlook
   };
   const convertToTimestampE = () => {
     endTimestamp = DateTime.fromJSDate(new Date(Date.parse(`${ed}T${et}`)));
     endTimestamp = endTimestamp.setZone(timezone).toISO();
-    endTimestampg = endTimestamp; // google
+    endTSG = endTimestamp; // google
     console.log(endTimestamp); 
-    endTimestampo = endTimestamp.slice(0, -10) + endTimestamp.slice(-6, endTimestamp.length + 1); // outlook
-    console.log(endTimestampo);
+    endTSO = endTimestamp.slice(0, -10) + endTimestamp.slice(-6, endTimestamp.length + 1); // outlook
+    console.log(endTSO);
   };
 
   $: timezone = lookup(zipcode);
@@ -47,9 +47,9 @@
       googleLink = `https://calendar.google.com/calendar/render?${QS.stringify({
         action: "TEMPLATE",
         dates:
-          startTimestampg.replace(/([-:.])/g, "") +
+          startTSG.replace(/([-:.])/g, "") +
           "/" +
-          endTimestampg.replace(/([-:.])/g, ""),
+          endTSG.replace(/([-:.])/g, ""),
         details: "description",
         location: "location",
         text: "summary",
@@ -57,20 +57,20 @@
       })}`;
 
       // 2023-03-08T23:15:00+00:00
-      // startTimestampo = startTimestampo.slice(0, startTimestampo.lastIndexOf("-")) + "+" + startTimestampo.slice(startTimestampo.lastIndexOf("-") + 1, startTimestampo.length);
-      // startTimestampo = startTimestampo.slice(0, -5) + "00:00"
-      console.log(startTimestampo);
-      // endTimestampo = endTimestampo.slice(0, endTimestampo.lastIndexOf("-")) + "+" + endTimestampo.slice(endTimestampo.lastIndexOf("-") + 1, endTimestampo.length);
-      // endTimestampo = endTimestampo.slice(0, -5) + "00:00"
-      console.log(endTimestampo);
+      // startTSO = startTSO.slice(0, startTSO.lastIndexOf("-")) + "+" + startTSO.slice(startTSO.lastIndexOf("-") + 1, startTSO.length);
+      // startTSO = startTSO.slice(0, -5) + "00:00"
+      console.log(startTSO);
+      // endTSO = endTSO.slice(0, endTSO.lastIndexOf("-")) + "+" + endTSO.slice(endTSO.lastIndexOf("-") + 1, endTSO.length);
+      // endTSO = endTSO.slice(0, -5) + "00:00"
+      console.log(endTSO);
       outlookLink = `https://outlook.live.com/calendar/0/deeplink/compose?${QS.stringify(
         {
           body: "description",
-          startdt: startTimestampo.replace(/([.])/g, ""),
+          startdt: startTSO.replace(/([.])/g, ""),
           location: "location",
           path: "/calendar/action/compose",
           rru: "addevent",
-          enddt: endTimestampo.replace(/([.])/g, ""),
+          enddt: endTSO.replace(/([.])/g, ""),
           subject: "summary",
           allday: false,
           timeZone: timezone,
